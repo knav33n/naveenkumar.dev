@@ -1,0 +1,52 @@
+name: naveenkumar.dev workflow
+
+on:
+  push:
+    branches:
+      - "main"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone Source Code
+      uses: actions/checkout@v3
+
+    - name: Config AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::179311657228:role/NKDGithubActionsOIDC
+        aws-region: us-east-1
+
+    - name: Run Terraform Init
+      run: terraform init
+      working-directory: ./infra
+    - name: Run Terraform Plan
+      run: terraform plan
+      continue-on-error: false
+      working-directory: ./infra
+    - name: Run Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
+      continue-on-error: false
+      working-directory: ./infra
+    - name: Get CloudFront ID
+      run: echo "cf_var=$(terraform output cf_id)" >> $GITHUB_OUTPUT
+      id: cloudfront_id
+      working-directory: ./infra
+
+    - name: Install packages
+      run: npm install
+      working-directory: ./front-end
+    - name: Build front-end
+      run: npm run build
+      working-directory: ./front-end
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync ./dist s3://naveenkumar.dev-portfolio
+      working-directory: ./front-end
+    - name: Invalidate Cloudfront Cache
+      run: aws cloudfront create-invalidation --distribution-id ${{steps.cloudfront_id.outputs.cf_var}} --paths /* --region us-east-1

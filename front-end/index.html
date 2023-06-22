@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Naveen</title>
+    <link rel="stylesheet" href="https://use.typekit.net/biu0hfr.css" />
+    <link rel="stylesheet" href="main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+      document.documentElement.className = "js";
+      var supportsCssVars = function () {
+        var e,
+          t = document.createElement("style");
+        return (
+          (t.innerHTML = "root: { --tmp-var: bold; }"),
+          document.head.appendChild(t),
+          (e = !!(
+            window.CSS &&
+            window.CSS.supports &&
+            window.CSS.supports("font-weight", "var(--tmp-var)")
+          )),
+          t.parentNode.removeChild(t),
+          e
+        );
+      };
+      supportsCssVars() ||
+        alert(
+          "Please view this demo in a modern browser that supports CSS Variables."
+        );
+    </script>
+  </head>
+  <body>
+    <main>
+      <pre class="ascii">
+                 .88888888:.
+                88888888.88888.
+              .8888888888888888.
+              888888888888888888
+              88' _`88'_  `88888
+              88 88 88 88  88888
+              88_88_::_88_:88888
+              88:::,::,:::::8888
+              88`:::::::::'`8888
+             .88  `::::'    8:88.
+            8888            `8:888.
+          .8888'             `888888.
+         .8888:..  .::.  ...:'8888888:.
+        .8888.'     :'     `'::`88:88888
+       .8888        '         `.888:8888.
+      888:8         .           888:88888
+    .888:88        .:           888:88888:
+    8888888.       ::           88:888888
+    `.::.888.      ::          .88888888
+   .::::::.888.    ::         :::`8888'.:.
+  ::::::::::.888   '         .::::::::::::
+  ::::::::::::.8    '      .:8::::::::::::.
+ .::::::::::::::.        .:888:::::::::::::
+ :::::::::::::::88:.__..:88888:::::::::::'
+  `'.:::::::::::88888888888.88:::::::::'
+      </pre>
+      <dl class="content">
+        <dt>Name</dt>
+        <dd>Naveen</dd>
+        <dt>Profession</dt>
+        <dd>Software Engineer</dd>
+        <dt>About Me</dt>
+        <dd>
+          <span id="year-of-experience"></span> years of experience in Web
+          Development. Passion for DevOps practices. Constantly seeking new
+          challenges, growth opportunities as an individual contributor. Skilled
+          in a modern web development framework ReactJS(Typescript, Redux,
+          Sagas, MUI) and tools such as Terraform, Docker, Cloud Provider like
+          AWS.
+        </dd>
+        <dt>Github</dt>
+        <dd>
+          <a href="https://github.com/knav33n" target="_blank"
+            >github.com/knav33n</a
+          >
+        </dd>
+        <dt>E-Mail</dt>
+        <dd>
+          <a href="mailto:nnav33nk@gmail.com">knav33n</a>
+        </dd>
+        <dt></dt>
+        <!-- <dd><a href="/portfolio.html">Portfolio</a></dd> -->
+        <!-- <dt>Views</dt>
+        <dd id="views">Couldn't load views</dd> -->
+      </dl>
+    </main>
+    <script type="module" src="js/index.js"></script>
+  </body>
+</html>

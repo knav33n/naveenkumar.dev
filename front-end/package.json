@@ -1,0 +1,19 @@
+{
+  "name": "naveenkumar.dev-client",
+  "version": "0.1.0",
+  "description": "Naveen's personal website",
+  "author": "knav33n",
+  "scripts": {
+    "start": "parcel index.html",
+    "clean": "rm -rf dist/*",
+    "build:parcel": "parcel build index.html --no-content-hash --no-source-maps --public-url ./",
+    "build": "npm run clean && npm run build:parcel"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "splitting": "^1.0.6"
+  },
+  "devDependencies": {
+    "parcel": "^2.9.1"
+  }
+}
