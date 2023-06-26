@@ -92,3 +92,7 @@ resource "aws_lambda_function_url" "lambda_function_url" {
     max_age           = 86400
   }
 }
+
+output "fn_url" {
+  value = aws_lambda_function_url.lambda_function_url.function_url
+}
