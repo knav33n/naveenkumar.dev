@@ -1,5 +1,28 @@
 import { preloadFonts } from "./utils";
 import { TypeShuffle } from "./typeShuffle";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "../.env" });
+const API = process.env.LAMBDA_FUNCTION_URL;
+
+async function getViews() {
+  try {
+    let res = await fetch(API);
+    return await res.json();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function renderViews() {
+  let views = await getViews();
+  if (views) {
+    let viewContainer = document.querySelector("#views");
+    viewContainer.innerHTML = views + " •ᴗ•";
+  }
+}
+
+renderViews();
 
 preloadFonts("biu0hfr").then(() => {
   document.body.classList.remove("loading");

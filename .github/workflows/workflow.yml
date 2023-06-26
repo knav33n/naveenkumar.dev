@@ -38,9 +38,18 @@ jobs:
       run: echo "cf_var=$(terraform output cf_id)" >> $GITHUB_OUTPUT
       id: cloudfront_id
       working-directory: ./infra
+    - name: Get Lambda Function URL
+      run: echo "LAMBDA_FUNCTION_URL=$(terraform output fn_url)" >> $GITHUB_OUTPUT
+      id: lambda_fn_url
+      working-directory: ./infra
 
     - name: Install packages
       run: npm install
+      working-directory: ./front-end
+    - name: Writing .env file
+      run: |
+        touch .env
+        echo LAMBDA_FUNCTION_URL=${{steps.lambda_fn_url.outputs.LAMBDA_FUNCTION_URL}} >> .env
       working-directory: ./front-end
     - name: Build front-end
       run: npm run build
@@ -49,4 +58,6 @@ jobs:
       run: aws s3 sync ./dist s3://naveenkumar.dev-portfolio
       working-directory: ./front-end
     - name: Invalidate Cloudfront Cache
-      run: aws cloudfront create-invalidation --distribution-id ${{steps.cloudfront_id.outputs.cf_var}} --paths /* --region us-east-1
+      run: aws cloudfront create-invalidation --distribution-id ${{steps.cloudfront_id.outputs.cf_var}} --paths "/*" --region us-east-1
+    - name: Delete Lambda Build
+      run: aws s3api delete-object --bucket naveenkumar.dev-portfolio --key back-end.zip

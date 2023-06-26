@@ -11,9 +11,17 @@
   },
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "splitting": "^1.0.6"
   },
   "devDependencies": {
-    "parcel": "^2.9.1"
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "events": "^3.3.0",
+    "os-browserify": "^0.3.0",
+    "parcel": "^2.9.1",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0"
   }
 }
