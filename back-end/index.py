@@ -5,6 +5,8 @@ import ipaddress
 
 def lambda_handler(event, context):
 
+    raise Exception('Testing!')
+
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('VisitorsCount')
 
