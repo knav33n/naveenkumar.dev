@@ -139,7 +139,7 @@ def lambda_handler(event, context):
 
     msg = str()
 
-    print('****** printing alarm')
+    print('****** printing alarm and slack_url')
     print(slack_url)
     print(alarm)
     if alarm['previous_state'] == "INSUFFICIENT_DATA" and alarm['state'] == 'OK':
