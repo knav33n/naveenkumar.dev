@@ -1,7 +1,8 @@
 import urllib3
 import json
+import os
 
-slack_url = 'https://hooks.slack.com/services/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'
+slack_url = os.environ['SLACK_WEBHOOK']
 http = urllib3.PoolManager()
 
 def get_alarm_attributes(sns_message):

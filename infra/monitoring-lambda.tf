@@ -27,6 +27,12 @@ resource "aws_lambda_function" "sns_lambda" {
   source_code_hash = data.archive_file.sns_lambda.output_base64sha256
 
   role = aws_iam_role.lambda_iam.arn
+
+  environment {
+    variables = {
+      SLACK_WEBHOOK = var.SLACK_WEBHOOK
+    }
+  }
 }
 
 resource "aws_lambda_permission" "sns_lambda" {
