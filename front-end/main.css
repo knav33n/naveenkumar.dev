@@ -115,12 +115,15 @@ main {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
 }
 
 .ascii {
   color: var(--color-link);
   opacity: 0.5;
-  position: fixed;
+  position: absolute;
   right: 20px;
   top: 20px;
   pointer-events: none;
