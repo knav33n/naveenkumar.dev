@@ -1,7 +1,8 @@
 # My Journey through - The Cloud Resume Challenge
 
-Site: [https://naveenkumar.dev](https://naveenkumar.dev)
-Repo: [https://github.com/knav33n/naveenkumar.dev](https://github.com/knav33n/naveenkumar.dev)
+Links
+- Site: [https://naveenkumar.dev](https://naveenkumar.dev)
+- Repo: [https://github.com/knav33n/naveenkumar.dev](https://github.com/knav33n/naveenkumar.dev)
 
 As someone who loves to learn by doing, I was actively exploring ways to gain practical experience in cloud-related skills. That's when I stumbled upon The Cloud Resume Challenge. Even though I have prior experience in software development, I was genuinely amazed at how much I learned through this challenge. In a nutshell, the challenge invites you to deploy an application on a cloud provider of your choice. The flexibility to choose any provider intrigued me, and given my familiarity with AWS, I decided to go with it.
 
@@ -22,3 +23,18 @@ Next, I delved into using Terraform to provision the necessary infrastructure. I
 But eventually, after much persistence and effort, I managed to provision everything I needed using Terraform. From setting up S3 buckets to configuring CloudWatch alarms, I successfully achieved the desired infrastructure setup. It was truly fulfilling to see everything fall into place after overcoming the initial learning curve and persisting through the challenges.
 
 In conclusion, this journey has been nothing short of incredible, filled with invaluable learning experiences. I am immensely grateful to Forrest Brazeal for crafting such an amazing challenge. It has pushed me to explore new territories, expand my skill set, and discover the boundless possibilities of cloud-related technologies.
+
+Helpful links -
+- https://www.automat-it.com/post/using-github-actions-with-aws-iam-roles
+- https://github.com/aws-actions/configure-aws-credentials
+- https://repost.aws/knowledge-center/cloudfront-serve-static-website
+- https://www.netlify.com/guides/creating-an-api-with-aws-lambda-dynamodb-and-api-gateway/setting-up-our-lambda-function/
+- https://aws.amazon.com/getting-started/hands-on/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/
+- https://stackoverflow.com/questions/57288992/terraform-how-to-create-iam-role-for-aws-lambda-and-deploy-both
+- https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime
+- https://stackoverflow.com/a/56070283
+- https://stackoverflow.com/a/67879838
+- https://www.youtube.com/watch?v=NxQgltu1yYM
+- https://www.youtube.com/watch?v=G4_ay2_h9GI
+- https://www.youtube.com/watch?v=ox_HJ8w7FPI
+- https://medium.com/analytics-vidhya/generate-slack-notifications-for-aws-cloudwatch-alarms-e46b68540133
