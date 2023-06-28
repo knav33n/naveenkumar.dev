@@ -38,3 +38,4 @@ Helpful links -
 - https://www.youtube.com/watch?v=G4_ay2_h9GI
 - https://www.youtube.com/watch?v=ox_HJ8w7FPI
 - https://medium.com/analytics-vidhya/generate-slack-notifications-for-aws-cloudwatch-alarms-e46b68540133
+- https://github.com/aws-actions/configure-aws-credentials/issues/357
