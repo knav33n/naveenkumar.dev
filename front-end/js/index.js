@@ -10,6 +10,8 @@ async function getViews() {
     let res = await fetch(API);
     return await res.json();
   } catch (error) {
+    let viewContainer = document.querySelector("#views");
+    viewContainer.innerHTML = "Couldn't load views (◡︵◡)";
     console.log(error);
   }
 }
