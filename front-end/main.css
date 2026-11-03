@@ -144,6 +144,14 @@ dd {
   margin: 0;
 }
 
+dd p {
+  margin: 0 0 1em;
+}
+
+dd p:last-child {
+  margin-bottom: 0;
+}
+
 .splitting .words .word {
   white-space: nowrap;
 }
