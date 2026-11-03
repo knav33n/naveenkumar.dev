@@ -22,7 +22,7 @@ resource "aws_iam_role_policy_attachment" "crc_sns" {
 }
 
 resource "aws_sns_topic" "crc_sns" {
-  name     = "NKDSnsTopic"
+  name = "NKDSnsTopic"
 
   lambda_success_feedback_sample_rate = 100
 
