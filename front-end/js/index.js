@@ -1,10 +1,9 @@
 import { preloadFonts } from "./utils";
 import { TypeShuffle } from "./typeShuffle";
+import { animateAscii, pickArt } from "./ascii";
 
 const API = process.env.LAMBDA_FUNCTION_URL;
 
-// Short links look like /r/<id>. Pass the id to the views Lambda (which
-// alerts Slack), then show the plain homepage URL in the address bar.
 function viewsUrl() {
   const match = window.location.pathname.match(/^\/r\/([a-z0-9]{4,16})\/?$/);
   if (!match) return API;
@@ -38,8 +37,13 @@ async function renderViews() {
 
 renderViews();
 
+const asciiEl = document.querySelector(".ascii");
+const asciiArt = pickArt(asciiEl);
+
 preloadFonts("biu0hfr").then(() => {
   document.body.classList.remove("loading");
+
+  animateAscii(asciiEl, asciiArt);
 
   [...document.querySelectorAll(".content")].forEach((content) => {
     const ts = new TypeShuffle(content);
