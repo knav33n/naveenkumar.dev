@@ -23,6 +23,14 @@ jobs:
         role-to-assume: arn:aws:iam::179311657228:role/NKDGithubActionsOIDC
         aws-region: us-east-1
 
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.17.1
+        # The wrapper adds extra text to stdout, which breaks the
+        # `terraform output -raw` values captured below.
+        terraform_wrapper: false
+
     - name: Run Terraform Init
       run: |
         export TF_VAR_SLACK_WEBHOOK=$SLACK_WEBHOOK
