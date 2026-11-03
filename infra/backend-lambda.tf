@@ -18,11 +18,7 @@ data "aws_iam_policy_document" "policy_doc_to_access_dynamodb" {
     effect = "Allow"
     actions = [
       "dynamodb:PutItem",
-      "dynamodb:GetItem",
-      "dynamodb:UpdateItem",
-      "dynamodb:DescribeTable",
       "dynamodb:Scan",
-      "lambda:GetFunction"
     ]
     resources = [aws_dynamodb_table.crc_db_table.arn]
   }
@@ -71,8 +67,10 @@ resource "aws_lambda_function" "lambda" {
   s3_bucket = aws_s3_bucket.s3.id
   s3_key    = aws_s3_object.lambda.key
 
-  runtime = "python3.9"
-  handler = "index.lambda_handler"
+  runtime     = "python3.12"
+  handler     = "index.lambda_handler"
+  timeout     = 10
+  memory_size = 256
 
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
@@ -84,9 +82,9 @@ resource "aws_lambda_function_url" "lambda_function_url" {
   authorization_type = "NONE"
 
   cors {
-    allow_credentials = true
+    allow_credentials = false
     allow_origins     = ["https://naveenkumar.dev", "https://www.naveenkumar.dev"]
-    allow_methods     = ["*"]
+    allow_methods     = ["GET"]
     allow_headers     = ["date", "keep-alive"]
     expose_headers    = ["keep-alive", "date"]
     max_age           = 86400
