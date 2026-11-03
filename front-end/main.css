@@ -94,7 +94,8 @@ a:focus-visible {
   /* Draw a very noticeable focus style for
 	 keyboard-focus on browsers that do support
 	 :focus-visible */
-  outline: 2px solid red;
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
   background: transparent;
 }
 
@@ -112,7 +113,7 @@ a:focus-visible {
 }
 
 main {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   max-width: 1300px;
@@ -129,11 +130,63 @@ main {
   pointer-events: none;
 }
 
+.prompt {
+  margin: 0;
+  padding: 7vh 2rem 0;
+  color: var(--color-link);
+  text-transform: none;
+}
+
+.prompt__path {
+  opacity: 0.6;
+}
+
 .content {
   display: grid;
   gap: 1rem;
   max-width: 830px;
-  padding: 7vh 2rem 0;
+  margin: 0;
+  padding: 1.5rem 2rem 7vh;
+}
+
+/* Long-form text reads better in normal case */
+.bio {
+  text-transform: none;
+  line-height: 1.6;
+}
+
+/* Terminal-style cursor after the name */
+.cursor::after {
+  content: "▋";
+  margin-left: 0.15em;
+  color: var(--color-link);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor::after {
+    animation: none;
+  }
+}
+
+/* Links shown as [link] with an inverted hover */
+.content a::before {
+  content: "[";
+}
+
+.content a::after {
+  content: "]";
+}
+
+.content a:hover {
+  color: var(--color-bg);
+  background: var(--color-link);
 }
 
 dt {
