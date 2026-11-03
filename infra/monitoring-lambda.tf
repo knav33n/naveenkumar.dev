@@ -21,12 +21,13 @@ resource "aws_lambda_function" "sns_lambda" {
   s3_bucket = aws_s3_bucket.s3.id
   s3_key    = aws_s3_object.sns_lambda.key
 
-  runtime = "python3.9"
+  runtime = "python3.12"
   handler = "index.lambda_handler"
+  timeout = 10
 
   source_code_hash = data.archive_file.sns_lambda.output_base64sha256
 
-  role = aws_iam_role.lambda_iam.arn
+  role = aws_iam_role.notifier.arn
 
   environment {
     variables = {
@@ -47,4 +48,38 @@ resource "aws_sns_topic_subscription" "sns_lambda" {
   topic_arn = aws_sns_topic.crc_sns.arn
   protocol  = "lambda"
   endpoint  = aws_lambda_function.sns_lambda.arn
+}
+
+# The notifier has its own role: it reads the backend's logs and alarm history
+# to enrich alerts, and needs no DynamoDB access.
+resource "aws_iam_role" "notifier" {
+  name               = "NKDSlackNotifierRole"
+  assume_role_policy = data.aws_iam_policy_document.policy_doc_to_assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "notifier_basic" {
+  role       = aws_iam_role.notifier.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "aws_caller_identity" "current" {}
+
+data "aws_iam_policy_document" "notifier" {
+  statement {
+    effect    = "Allow"
+    actions   = ["logs:FilterLogEvents"]
+    resources = ["arn:aws:logs:us-east-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${aws_lambda_function.lambda.function_name}:*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["cloudwatch:DescribeAlarmHistory"]
+    resources = ["arn:aws:cloudwatch:us-east-1:${data.aws_caller_identity.current.account_id}:alarm:NKD*"]
+  }
+}
+
+resource "aws_iam_role_policy" "notifier" {
+  name   = "NKDSlackNotifierPolicy"
+  role   = aws_iam_role.notifier.id
+  policy = data.aws_iam_policy_document.notifier.json
 }
