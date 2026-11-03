@@ -1,14 +1,15 @@
 import { preloadFonts } from "./utils";
 import { TypeShuffle } from "./typeShuffle";
-import dotenv from "dotenv";
 
-dotenv.config({ path: "../.env" });
 const API = process.env.LAMBDA_FUNCTION_URL;
 
 async function getViews() {
   try {
     let res = await fetch(API);
-    return await res.json();
+    if (!res.ok) throw new Error(`views request failed: ${res.status}`);
+    let views = await res.json();
+    if (typeof views !== "number") throw new Error("unexpected views response");
+    return views;
   } catch (error) {
     let viewContainer = document.querySelector("#views");
     viewContainer.innerHTML = "Couldn't load views (◡︵◡)";
@@ -18,7 +19,7 @@ async function getViews() {
 
 async function renderViews() {
   let views = await getViews();
-  if (views) {
+  if (views !== undefined) {
     let viewContainer = document.querySelector("#views");
     viewContainer.innerHTML = views + " •ᴗ•";
   }
