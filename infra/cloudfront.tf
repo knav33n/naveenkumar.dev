@@ -5,6 +5,23 @@ resource "aws_cloudfront_origin_access_control" "cf" {
   signing_protocol                  = "sigv4"
 }
 
+# Short links (/r/<id>) are served the normal homepage; the page
+# reads the id from the path and hands it to the views Lambda.
+resource "aws_cloudfront_function" "short_links" {
+  name    = "short-link-rewrite"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = <<-JS
+    function handler(event) {
+      var request = event.request;
+      if (/^\/r\/[a-z0-9]{4,16}\/?$/.test(request.uri)) {
+        request.uri = "/index.html";
+      }
+      return request;
+    }
+  JS
+}
+
 resource "aws_cloudfront_distribution" "cf" {
   origin {
     domain_name              = aws_s3_bucket.s3.bucket_regional_domain_name
@@ -28,6 +45,11 @@ resource "aws_cloudfront_distribution" "cf" {
       cookies {
         forward = "none"
       }
+    }
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.short_links.arn
     }
 
     viewer_protocol_policy = "redirect-to-https"

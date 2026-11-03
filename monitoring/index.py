@@ -1,4 +1,5 @@
-"""Turns CloudWatch alarm notifications (via SNS) into readable Slack alerts."""
+"""Slack alerts for CloudWatch alarms (via SNS) and short-link visits
+(invoked directly by the views Lambda)."""
 import json
 import os
 import re
@@ -159,6 +160,48 @@ def build_message(msg):
     }
 
 
+def describe_device(ua):
+    ua = ua or ''
+    browser = next((name for key, name in [
+        ('Edg/', 'Edge'), ('OPR/', 'Opera'), ('Firefox/', 'Firefox'),
+        ('Chrome/', 'Chrome'), ('Safari/', 'Safari'),
+    ] if key in ua), None)
+    system = next((name for key, name in [
+        ('iPhone', 'iPhone'), ('iPad', 'iPad'), ('Android', 'Android'),
+        ('Windows', 'Windows'), ('Mac OS X', 'macOS'), ('Linux', 'Linux'),
+    ] if key in ua), None)
+    if not browser and not system:
+        return ua[:80] or 'Unknown'
+    return ' on '.join(x for x in (browser, system) if x)
+
+
+def slack_escape(text):
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
+
+def build_visit_message(event):
+    company = slack_escape(event['company'])
+    opened_at = datetime.fromisoformat(event['opened_at'])
+    visitor = {True: 'First visit', False: 'Returning visitor'}.get(event.get('first_visit'), 'Unknown')
+    fields = [
+        f'*When*\n{slack_time(opened_at)}',
+        f'*Device*\n{describe_device(event.get("user_agent"))}',
+        f'*Visitor*\n{visitor}',
+    ]
+    if event.get('note'):
+        fields.append(f'*Note*\n{slack_escape(event["note"])}')
+    return {
+        'text': f'{company} visited naveenkumar.dev',
+        'attachments': [{'color': '#3b82f6', 'blocks': [
+            {'type': 'section', 'text': {'type': 'mrkdwn',
+                'text': f':wave: *{company}* visited naveenkumar.dev'}},
+            {'type': 'section', 'fields': [{'type': 'mrkdwn', 'text': f} for f in fields]},
+            {'type': 'context', 'elements': [{'type': 'mrkdwn',
+                'text': f'naveenkumar.dev/r/{event.get("link_id", "?")}'}]},
+        ]}],
+    }
+
+
 def post_to_slack(payload, label):
     resp = http.request(
         'POST',
@@ -178,6 +221,10 @@ def should_notify(old, new):
 
 
 def lambda_handler(event, context):
+    if event.get('type') == 'link_visit':
+        post_to_slack(build_visit_message(event), f'link_visit:{event["company"]}')
+        return
+
     for record in event['Records']:
         msg = json.loads(record['Sns']['Message'])
         old, new = msg['OldStateValue'], msg['NewStateValue']

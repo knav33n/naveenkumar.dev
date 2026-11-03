@@ -3,9 +3,20 @@ import { TypeShuffle } from "./typeShuffle";
 
 const API = process.env.LAMBDA_FUNCTION_URL;
 
+// Short links look like /r/<id>. Pass the id to the views Lambda (which
+// alerts Slack), then show the plain homepage URL in the address bar.
+function viewsUrl() {
+  const match = window.location.pathname.match(/^\/r\/([a-z0-9]{4,16})\/?$/);
+  if (!match) return API;
+  history.replaceState(null, "", "/" + window.location.hash);
+  const url = new URL(API);
+  url.searchParams.set("ref", match[1]);
+  return url.toString();
+}
+
 async function getViews() {
   try {
-    let res = await fetch(API);
+    let res = await fetch(viewsUrl());
     if (!res.ok) throw new Error(`views request failed: ${res.status}`);
     let views = await res.json();
     if (typeof views !== "number") throw new Error("unexpected views response");

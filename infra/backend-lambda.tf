@@ -22,6 +22,18 @@ data "aws_iam_policy_document" "policy_doc_to_access_dynamodb" {
     ]
     resources = [aws_dynamodb_table.crc_db_table.arn]
   }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:GetItem"]
+    resources = [aws_dynamodb_table.share_links.arn]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["lambda:InvokeFunction"]
+    resources = [aws_lambda_function.sns_lambda.arn]
+  }
 }
 
 data "archive_file" "lambda" {
@@ -71,6 +83,13 @@ resource "aws_lambda_function" "lambda" {
   handler     = "index.lambda_handler"
   timeout     = 10
   memory_size = 256
+
+  environment {
+    variables = {
+      SHARE_LINKS_TABLE = aws_dynamodb_table.share_links.name
+      NOTIFIER_FUNCTION = aws_lambda_function.sns_lambda.function_name
+    }
+  }
 
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
